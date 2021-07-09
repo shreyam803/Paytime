@@ -7,18 +7,25 @@ const Razorpay = require("razorpay");
 
 dotenv.config();
 let app = express();
+
+
+//creating instance
 const instance = new Razorpay({
+
   key_id: process.env.KEY_ID,
   key_secret: process.env.KEY_SECRET,
 });
+
 //Middlewares
 app.use(cors());
 app.use(express.json());
+
 app.use(
   bodyParser.urlencoded({
     extended: false,
   })
 );
+
 app.use(bodyParser.json());
 app.set("view engine", "ejs");
 
@@ -26,8 +33,10 @@ app.set("view engine", "ejs");
 app.get("/payments", (req, res) => {
   res.render("payment", { key: process.env.KEY_ID });
 });
+
 app.post("/api/payment/order", (req, res) => {
   params = req.body;
+  
   instance.orders
     .create(params)
     .then((data) => {
@@ -45,13 +54,17 @@ app.post("/api/payment/verify", (req, res) => {
     .createHmac("sha256", process.env.KEY_SECRET)
     .update(body.toString())
     .digest("hex");
+
   console.log("sig" + req.body.razorpay_signature);
   console.log("sig" + expectedSignature);
+
   var response = { status: "failure" };
+
   if (expectedSignature === req.body.razorpay_signature)
     response = { status: "success" };
   res.send(response);
 });
+
 app.listen("3000", () => {
   console.log("Server is running at Port 3000.");
 });

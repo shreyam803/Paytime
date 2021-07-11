@@ -1,13 +1,16 @@
 let express = require("express");
+const path = require('path');
 const dotenv = require("dotenv");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const crypto = require("crypto");
 const Razorpay = require("razorpay");
 
+
 dotenv.config();
 let app = express();
 
+app.use(express.static(path.join(__dirname,'')));
 
 //creating instance
 const instance = new Razorpay({
@@ -27,16 +30,26 @@ app.use(
 );
 
 app.use(bodyParser.json());
-app.set("view engine", "ejs");
+
+app.set('view engine','ejs');
+
 
 //Routes
+
+app.get('/about', (req, res) => {
+    res.render('about');
+})
+app.get('/help', (req, res) => {
+    res.render('help');
+})
+
 app.get("/payments", (req, res) => {
   res.render("payment", { key: process.env.KEY_ID });
 });
 
 app.post("/api/payment/order", (req, res) => {
   params = req.body;
-  
+
   instance.orders
     .create(params)
     .then((data) => {
@@ -63,6 +76,10 @@ app.post("/api/payment/verify", (req, res) => {
   if (expectedSignature === req.body.razorpay_signature)
     response = { status: "success" };
   res.send(response);
+});
+
+app.get('/*', (req, res) => {                
+    res.status(400).render('error',{path: req.originalUrl, pageTitle:'Page not found'});
 });
 
 app.listen("3000", () => {

@@ -1,3 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./public/css/styles.css">
+    <title>Payment</title>
+</head>
+
+<header>
+    <h1 class="title" >PAYTIME</h1>
+
+<div class="nav">
+    <a href="/payments">Home</a>
+    <a href="/about">About</a>
+    <a href="/help">Help</a>
+</div>
+
+</header>
+<body>
+
 <label for="">Amount: </label>
 <input type="text" id="order-amt">
 <br>
@@ -42,8 +63,8 @@
         var options = {
             "key": "<%= key %>",
             "currency": "INR",
-            "name": "WTH Coding",
-            "description": "WtH Coding Transaction",
+            "name": "Sparks Donation",
+            "description": "Sparks Donation Transactions",
             "order_id": document.getElementById("rzp-text").value,
             "handler": function(response) {
                 document.getElementById('order-pay-id').value = response.razorpay_payment_id;
@@ -86,9 +107,16 @@
                 alert(xmlHttp.responseText);
             }
         }
-        
+
         xmlHttp.open("POST", url, true); // false for synchronous request
         xmlHttp.setRequestHeader("Content-type", "application/json");
         xmlHttp.send(JSON.stringify(params));
     }
 </script>
+</body>
+
+<footer>
+    <p>Created by Shreya Maheshwari</p>
+    </footer>
+
+    </html>
